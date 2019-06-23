@@ -1,6 +1,9 @@
+import sys
+import argparse
+
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
+
 
 
 class Organism:
@@ -153,32 +156,41 @@ def optimalGaussian(mu, sigma):
         return 1/error
     return simulationTestGaussian2
 
+
+parser = argparse.ArgumentParser(description='Process arguments.')
+parser.add_argument('-e', '--MaxError', metavar='max_error', type=float, default = 1e-8, 
+                    help=' Max error (recommended: 1e-8 to 1e-10; bigger error for smaller sigma values)')
+parser.add_argument('-m', '--Mu', metavar='mu', type=float, default=10.0,
+                    help='Mean of Optimal Gaussian (recommended: <=20)')
+parser.add_argument('-s', '--Sigma', metavar='sigma', type=float, default = 3.0, 
+                    help='Sigma of Optimal Gaussian (recommended: 1-5)')
+parser.add_argument('-r', '--MutationRate', metavar='mutation_rate', type=float, default = 0.01,
+                    help='Mutation rate (recommended: around 0.01)')
+parser.add_argument('-n', '--PopulationSize', metavar='N', type=int,  default = 100, 
+                    help='Population size N (recommended: 100)')
+parser.add_argument('-k', '--K', metavar='K', type=int, default = 40, 
+                    help='K parameter for tournament selection (recommended: 40 for N = 100)')
+
 def main():
     """
     Arguments:
     - Max error (recommended: 1e-8 to 1e-10; bigger error for smaller sigma values)
     - Mean of Optimal Gaussian (recommended: <=20)
-    - Sigma of Optimal Gaussian (recommended: 3)
+    - Sigma of Optimal Gaussian (recommended: 1-5)
     - Mutation rate (recommended: around 0.01)
     - Population size N (recommended: 100)
     - K parameter for tournament selection (recommended: 40 for N = 100)
+    
     """
-    #optimal = simulationTestGaussian([10])
+    args = parser.parse_args()
+    max_error = args.MaxError
+    mu = args.Mu
+    sigma = args.Sigma
+    mutation_rate = args.MutationRate
+    N = args.PopulationSize
+    K = args.K
+
     optimal = 0
-    if(len(sys.argv) < 7):
-        max_error = 1e-10  #works with 1e-8 to 1e-10 (for small sigma, use higher error)
-        mu = 10  #Works with mu <=20
-        sigma = 3
-        mutation_rate = 0.01  #works with 0.25
-        N = 100
-        K = 40
-    else:
-        max_error = sys.argv[1]
-        mu = sys.argv[2]
-        sigma = sys.argv[3]
-        mutation_rate = sys.argv[4]
-        N = sys.argv[5]
-        K = sys.argv[6]
     stop = StopCriteria2(optimal, max_error)
     sim_function = optimalGaussian(mu, sigma)
     pop = TournamentPopulation(N = N, K = K, num_genes = 2, mutation_rate = mutation_rate)
