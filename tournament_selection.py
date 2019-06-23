@@ -126,21 +126,6 @@ class TournamentPopulation:
 
 
 
-def simulationTestGaussian(params):
-
-    """
-    Test function 1: gaussian with mean = 10, sigma = 2.5
-    The individuals will try to guess what is the mean of the gaussian
-    You can define any function and pass it to the tournamentSelection method of a TournamentPopulation object
-    """
-
-    mu = 0
-    sigma = 2.5
-    val = np.mean(params) # Each individual has several genes, here we will use the mean of all of them. In a real simulation each gene would be a different parameter
-    a = 1/(sigma*np.pi)
-    b = - 0.5 * np.power((mu - val)/sigma, 2)
-    return a*np.exp(b)
-
 def gaussian(mu, sigma, start, end):
 
     """
